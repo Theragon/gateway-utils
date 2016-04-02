@@ -1,114 +1,58 @@
-from redis import StrictRedis
-from disq import Disque
-
-DEFAULT_ENGINE = 'redis'
-CURRENT_ENGINE = 'disque'
+# A wrapper module for different queue systems
+from redisengine import RedisEngine as redis
+from disqueengine import DisqueEngine as disque
 
 DISQUE = 'disque'
 REDIS = 'redis'
 
-d = None
-r = None
+DEFAULT_ENGINE = DISQUE
+CURRENT_ENGINE = DISQUE
+
+q = None
 
 engines = {
-	'disque': {'host': 'localhost', 'port': 7711},
-	'redis': {'host': 'localhost', 'port': 6379}
+	DISQUE: {'host': 'localhost', 'port': 7711},
+	REDIS: {'host': 'localhost', 'port': 6379}
 }
 
 
 def connect(engine=None):
-	return init_engine(engine)
-
-
-def init_engine(engine=None):
+	global q
+	global CURRENT_ENGINE
 	if engine is None:
-		engine = CURRENT_ENGINE
-	host = engines[engine]['host']
-	port = engines[engine]['port']
-	return init_funcs[engine](host, port)
-
-
-def init_disque(host, port):
-	global d
-	d = Disque(host=host, port=port)
-	return is_disque_available()
-
-
-def init_redis(host, port):
-	global r
-	r = StrictRedis(host=host, port=port, db=0)
-	return is_redis_available()
-
-
-init_funcs = {
-		DISQUE: init_disque,
-		REDIS: init_redis
-	}
+		engine = DEFAULT_ENGINE
+	CURRENT_ENGINE = engine
+	constructor = globals()[engine]
+	q = constructor()
+	return q.connect()
 
 
 def switch_to_engine(engine):
 	if engine in engines:
-		global CURRENT_ENGINE
-		CURRENT_ENGINE = engine
-		print('switching to ' + CURRENT_ENGINE)
-		return init_engine(CURRENT_ENGINE)
+		#global CURRENT_ENGINE
+		#CURRENT_ENGINE = engine
+		print('switching to ' + engine)
+		return connect(engine)
 
 
 def is_available(engine=None):
 	if engine is None:
 		engine = CURRENT_ENGINE
 	print('current engine: ' + engine)
-	return availability_funcs[engine]()
-
-
-def is_disque_available():
-	print('is disque available')
-	if d is None:
-		return False
-	return d.hello() is not None
-
-
-def is_redis_available():
-	print('is redis available')
-	if r is None:
-		return False
-	return r.ping() is not None
-
-
-availability_funcs = {
-		DISQUE: is_disque_available,
-		REDIS: is_redis_available
-	}
+	return q.is_available()
 
 
 def enqueue(queue, msg, timeout=0):
-	return {
-		DISQUE: enqueue_disque,
-		REDIS: enqueue_redis
-	}[CURRENT_ENGINE](queue, msg, timeout)
+	return q.enqueue(queue, msg, timeout)
 
 
-def enqueue_disque(queue, msg, timeout=0):
-	d.addjob(queue, msg)
+def dequeue(queue, timeout=0):
+	return q.dequeue(queue, timeout)
 
 
-def enqueue_redis(queue, msg, timeout=0):
-	r.rpush(queue, msg)
+def get_from_queues(queues, timeout=0):
+	return q.get_from_queues(queues, timeout)
 
 
-def dequeue(queue, timeout=None):
-	return {
-		DISQUE: dequeue_disque,
-		REDIS: dequeue_redis
-	}[CURRENT_ENGINE](queue, timeout)
-
-
-def dequeue_disque(queue, timeout=0):
-	rsp = d.getjob(queue)
-	d.ackjob(rsp[0][1])
-	return rsp[0][2]
-
-
-def dequeue_redis(queue, timeout):
-	rsp = r.blpop(queue, timeout=0)
-	return rsp[1]
+def flush_all():
+	return q.flush_all()
