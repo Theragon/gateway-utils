@@ -25,6 +25,7 @@ setup(
 	author="Logi Leifsson",
 	author_email="logileifs@gmail.com",
 
+	package_dir={'queueengines': 'queueengines'},
 	# Packages
 	#packages=['queueengines'],
 	packages=['gwutils.queueengines'],
