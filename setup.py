@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
 	# Application name:
-	name="gateway-utils",
+	name="gatewayutils",
 
 	# Version number (initial):
 	version="0.1.0",
