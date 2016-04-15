@@ -32,6 +32,7 @@ def connect(engine=None, host='localhost', port=7711):
 	constructor = engine.title() + 'Engine'
 	base_path = os.path.dirname(__file__)
 	module_path = base_path + '/queueengines/' + module_name
+	log.debug('path: ' + module_path)
 	queue_module = imp.load_source(engine_name, module_path)
 	q = getattr(queue_module, constructor)()
 	return q.connect(host, port)
