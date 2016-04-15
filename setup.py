@@ -8,7 +8,15 @@ setup(
 	version="0.1.0",
 
 	py_modules=[
-		'gwutils'
+		'gwutils',
+		'gwutils.dbutils',
+		'gwutils.decorators',
+		'gwutils.funcutils',
+		'gwutils.httputils',
+		'gwutils.messageutils',
+		'gwutils.parseutils',
+		'gwutils.pubsub',
+		'gwutils.queueutils'
 	],
 
 	# Application author details:
