@@ -16,7 +16,8 @@ setup(
 		'gwutils.messageutils',
 		'gwutils.parseutils',
 		'gwutils.pubsub',
-		'gwutils.queueutils'
+		'gwutils.queueutils',
+		'gwutils.queueengines'
 	],
 
 	# Application author details:
@@ -24,7 +25,7 @@ setup(
 	author_email="logileifs@gmail.com",
 
 	# Packages
-	#packages=["app"],
+	packages=['queueengines'],
 
 	# Include additional files into the package
 	#include_package_data=True,
