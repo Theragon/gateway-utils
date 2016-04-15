@@ -131,6 +131,18 @@ def post_req_oct(url, data, to=timeout):
 		return e
 
 
+def get_req_json(url, to=timeout):
+	try:
+		r = requests.get(url, headers=Headers.APP_JSON, timeout=to)
+		return r
+	except requests.exceptions.Timeout as e:
+		return e
+	except ValueError as e:
+		return e
+	except requests.exceptions.ConnectionError as e:
+		raise ConnectionError(e.message)
+
+
 class GatewayTimeoutException(Exception):
 	"""docstring for GatewayTimeoutException"""
 	def __init__(self, message=None):
@@ -182,10 +194,17 @@ class NotImplementedException(Exception):
 class NotFoundException(Exception):
 	"""docstring for NotFoundException"""
 	def __init__(self, message=None):
-		super(NotImplementedException, self).__init__(message)
+		super(NotFoundException, self).__init__(message)
 		self.status = 404
 		if self.message is None:
 			self.message = 'Not Found'
 		self.msg = self.message
 		self.rsp = (self.msg, self.status)
 		self.response = self.rsp
+
+
+class ConnectionError(requests.exceptions.ConnectionError):
+	"""docstring for ConnectionError"""
+	def __init__(self, message=None):
+		super(ConnectionError, self).__init__()
+		self.message = message
