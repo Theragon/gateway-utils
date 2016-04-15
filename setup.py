@@ -1,5 +1,5 @@
 from setuptools import setup
-from setuptools import find_packages
+#from setuptools import find_packages
 
 setup(
 	# Application name:
@@ -18,7 +18,7 @@ setup(
 		'gwutils.parseutils',
 		'gwutils.pubsub',
 		'gwutils.queueutils',
-		'gwutils.queueengines'
+		#'gwutils.queueengines'
 	],
 
 	# Application author details:
@@ -27,7 +27,7 @@ setup(
 
 	# Packages
 	#packages=['queueengines'],
-	packages=find_packages(),
+	packages=['gwutils.queueengines'],
 
 	# Include additional files into the package
 	#include_package_data=True,
