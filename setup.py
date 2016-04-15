@@ -2,20 +2,12 @@ from distutils.core import setup
 
 setup(
 	# Application name:
-	name="gatewayutils",
+	name="gwutils",
 
 	# Version number (initial):
 	version="0.1.0",
 
 	py_modules=[
-		'dbutils',
-		'decorators',
-		'funcutils',
-		'httputils',
-		'messageutils',
-		'parseutils',
-		'pubsub',
-		'queueutils'
 	],
 
 	# Application author details:
