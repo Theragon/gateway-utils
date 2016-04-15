@@ -1,4 +1,4 @@
-from distutils.core import setup
+from distutils.core import setup, find_packages
 
 setup(
 	# Application name:
@@ -25,7 +25,8 @@ setup(
 	author_email="logileifs@gmail.com",
 
 	# Packages
-	packages=['queueengines'],
+	#packages=['queueengines'],
+	packages=find_packages(),
 
 	# Include additional files into the package
 	#include_package_data=True,
